@@ -1,3 +1,3 @@
-export default function () {
-  return 'hello world';
-}
+import TokenRiver from './token-river';
+
+export { TokenRiver };
