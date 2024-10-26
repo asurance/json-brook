@@ -24,6 +24,9 @@
       "recommended": true,
       "suspicious": {
         "noFallthroughSwitchClause": "off"
+      },
+      "style": {
+        "noUselessElse": "off"
       }
     }
   },
