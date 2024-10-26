@@ -1,40 +1,12 @@
-# Modern.js Package
+# JsonRiver
 
-## Setup
+> 流式解析Json数据
+> 实现上参考了[json-to-ast](https://github.com/vtrushin/json-to-ast)
 
-Install the dependencies:
+## 当前进度
 
-```bash
-pnpm run install
-```
-
-## Get Started
-
-Run and debug the module:
-
-```bash
-pnpm run dev
-```
-
-Build the module for production:
-
-```bash
-pnpm run build
-```
-
-Enable optional features:
-
-```bash
-pnpm run new
-```
-
-Other commands:
-
-```bash
-pnpm run lint         # Lint and fix source files
-pnpm run change       # Add a new changeset
-pnpm run bump         # Update version and changelog via changeset
-pnpm run release      # Release the package
-```
-
-For more information, see the [Modern.js Module documentation](https://modernjs.dev/module-tools/en).
+- [x] token 解析
+- [ ] ast 解析
+- [ ] 生成数据
+- [ ] 新增主页
+- [ ] 添加单测

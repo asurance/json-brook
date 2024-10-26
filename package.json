@@ -1,46 +1,57 @@
 {
   "name": "json-river",
   "version": "0.1.0",
-  "types": "./dist/types/index.d.ts",
+  "description": "parse json data streamly",
+  "keywords": ["json", "stream"],
+  "homepage": "https://github.com/asurance/json-river",
+  "bugs": {
+    "url": "https://github.com/asurance/json-river/issues"
+  },
+  "license": "MIT",
+  "author": "asurance",
+  "sideEffects": [],
   "main": "./dist/lib/index.js",
   "module": "./dist/es/index.js",
+  "types": "./dist/types/index.d.ts",
+  "files": ["dist", "CHANGELOG.md"],
   "scripts": {
-    "prepare": "modern build && simple-git-hooks",
-    "dev": "modern dev",
     "build": "modern build",
+    "build:doc": "modern build --platform",
     "build:watch": "modern build -w",
-    "reset": "npx rimraf node_modules ./**/node_modules",
-    "lint": "biome check",
-    "change": "modern change",
     "bump": "modern bump",
-    "pre": "modern pre",
+    "change": "modern change",
     "change-status": "modern change-status",
+    "dev": "modern dev",
     "gen-release-note": "modern gen-release-note",
-    "release": "modern release",
+    "lint": "biome check",
     "new": "modern new",
+    "pre": "modern pre",
+    "prepare": "modern build && simple-git-hooks",
+    "release": "modern release",
+    "reset": "npx rimraf node_modules ./**/node_modules",
+    "sort": "sort-package-json",
     "upgrade": "modern upgrade"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged"
   },
   "lint-staged": {
     "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
       "biome check --files-ignore-unknown=true"
     ]
   },
-  "simple-git-hooks": {
-    "pre-commit": "npx lint-staged"
-  },
-  "dependencies": {},
-  "peerDependencies": {},
   "devDependencies": {
-    "@modern-js/module-tools": "2.60.2",
     "@biomejs/biome": "1.8.3",
-    "typescript": "~5.0.4",
+    "@modern-js/module-tools": "2.60.3",
+    "@modern-js/plugin-rspress": "1.33.1",
     "@types/node": "~16.11.7",
-    "rimraf": "^6.0.1",
     "lint-staged": "~13.1.0",
+    "rimraf": "^6.0.1",
     "simple-git-hooks": "^2.11.1",
-    "@modern-js/plugin-rspress": "1.31.1"
+    "sort-package-json": "^2.10.1",
+    "typescript": "~5.0.4"
   },
-  "sideEffects": [],
+  "packageManager": "pnpm@9.1.2",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
