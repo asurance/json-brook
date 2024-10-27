@@ -1,3 +1,3 @@
-import createTokenRiver from './create-token-river';
+import createJsonRiver from './create-json-river';
 
-export { createTokenRiver };
+export { createJsonRiver };

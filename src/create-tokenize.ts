@@ -9,13 +9,12 @@ export type KeywordValue = 'true' | 'false' | 'null';
 
 export type KeywordToken = {
   type: 'Keyword';
-  value: KeywordValue;
+  value: boolean | null;
 };
 
 export type KeywordCurrent = {
   type: 'Keyword';
   value: KeywordValue;
-
   matchedIndex: number;
 };
 
@@ -94,7 +93,7 @@ function isExp(char: string) {
   return char === 'e' || char === 'E';
 }
 
-export default function createTokenRiver() {
+export default function createTokenize() {
   let current: KeywordCurrent | StringCurrent | NumberCurrent | null = null;
 
   const write = (char: string): Token | Token[] | null => {
@@ -106,7 +105,7 @@ export default function createTokenRiver() {
             if (current.matchedIndex === current.value.length - 1) {
               const token: KeywordToken = {
                 type: 'Keyword',
-                value: current.value,
+                value: JSON.parse(current.value),
               };
               current = null;
               return token;
