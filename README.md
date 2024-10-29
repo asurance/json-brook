@@ -1,4 +1,4 @@
-# JsonRiver
+# JsonBrook
 
 > 流式解析Json数据
 > 实现上参考了[json-to-ast](https://github.com/vtrushin/json-to-ast)

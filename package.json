@@ -1,11 +1,11 @@
 {
-  "name": "json-river",
+  "name": "json-brook",
   "version": "0.0.1",
   "description": "parse json data streamly",
   "keywords": ["json", "stream"],
-  "homepage": "https://github.com/asurance/json-river",
+  "homepage": "https://github.com/asurance/json-brook",
   "bugs": {
-    "url": "https://github.com/asurance/json-river/issues"
+    "url": "https://github.com/asurance/json-brook/issues"
   },
   "license": "MIT",
   "author": "asurance",

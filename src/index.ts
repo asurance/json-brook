@@ -1,3 +1,3 @@
-import createJsonRiver from './create-json-river';
+import createJsonBrook from './create-json-brook';
 
-export { createJsonRiver };
+export { createJsonBrook };

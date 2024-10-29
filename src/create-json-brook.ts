@@ -29,7 +29,7 @@ function getValueFromNode(node: LiteralNode | ArrayNode | ObjectNode): any {
       );
   }
 }
-export default function createJsonRiver() {
+export default function createJsonBrook() {
   const tokenize = createTokenize();
   const parser = createParser();
   const write = (str: string) => {

@@ -1,4 +1,4 @@
-# json-river
+# json-brook
 
 ## 0.0.1
 
