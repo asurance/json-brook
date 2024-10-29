@@ -15,9 +15,13 @@ function getValueFromNode(node: LiteralNode | ArrayNode | ObjectNode): any {
         node.current ? [...node.children, node.current] : node.children
       ).map(child => getValueFromNode(child));
     case 'Object':
-      return node.children.reduce(
+      return (
+        node.current ? [...node.children, node.current] : node.children
+      ).reduce(
         (obj, property) => {
-          obj[property.key.value] = getValueFromNode(property.value);
+          if (property.value) {
+            obj[property.key.value] = getValueFromNode(property.value);
+          }
           return obj;
         },
         // biome-ignore lint/suspicious/noExplicitAny: 可以返回的类型不确定
