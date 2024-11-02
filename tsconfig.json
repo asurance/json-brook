@@ -9,6 +9,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "lib": ["DOM", "ESNext"],
+    "downlevelIteration": true,
     "moduleResolution": "node",
     "paths": {
       "@/*": ["./src/*"]
@@ -19,5 +20,5 @@
     "strict": true
   },
   "exclude": ["**/node_modules"],
-  "include": ["src"]
+  "include": ["src", "test/create-json-brook.test.ts"]
 }

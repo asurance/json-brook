@@ -100,7 +100,7 @@ export default function createTokenize() {
     if (current) {
       switch (current.type) {
         case 'Keyword':
-          if (char === keywords[current.matchedIndex + 1]) {
+          if (char === current.value[current.matchedIndex + 1]) {
             current.matchedIndex++;
             if (current.matchedIndex === current.value.length - 1) {
               const token: KeywordToken = {

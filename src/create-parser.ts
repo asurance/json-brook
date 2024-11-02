@@ -2,7 +2,7 @@ import type { Token } from './create-tokenize';
 
 export type RootNode = {
   type: 'Root';
-  value: ObjectNode | ArrayNode | LiteralNode | null;
+  current: ObjectNode | ArrayNode | LiteralNode | null;
 };
 
 export type LiteralNode = {
@@ -38,7 +38,7 @@ export enum PropertyNodeState {
 export type PropertyNode = {
   type: 'Property';
   key: IdentifierNode;
-  value: LiteralNode | ArrayNode | ObjectNode | null;
+  current: LiteralNode | ArrayNode | ObjectNode | null;
   state: PropertyNodeState;
   parent: ObjectNode;
 };
@@ -60,201 +60,137 @@ export type ObjectNode = {
 export default function createParser() {
   const root: RootNode = {
     type: 'Root',
-    value: null,
+    current: null,
   };
   let currentRef: RootNode | ArrayNode | PropertyNode | ObjectNode = root;
-  const getRoot = (): LiteralNode | ArrayNode | ObjectNode | null => root.value;
+  const tryGetNextValue = (
+    token: Token,
+  ): LiteralNode | ArrayNode | ObjectNode | null => {
+    if (token.type === 'Keyword') {
+      return {
+        type: 'Literal',
+        value: token.value,
+      };
+    }
+    if (token.type === 'String') {
+      return {
+        type: 'Literal',
+        value: token.value,
+      };
+    }
+    if (token.type === 'Number') {
+      return {
+        type: 'Literal',
+        value: token.value,
+      };
+    }
+    if (token.type === 'Symbol' && token.value === '[') {
+      return {
+        type: 'Array',
+        children: [],
+        state: ArrayNodeState.Start,
+        parent: currentRef as RootNode | ArrayNode | PropertyNode,
+        current: null,
+      };
+    }
+    if (token.type === 'Symbol' && token.value === '{') {
+      return {
+        type: 'Object',
+        children: [],
+        state: ObjectNodeState.Start,
+        parent: currentRef as RootNode | ArrayNode | PropertyNode,
+        current: null,
+      };
+    }
+    return null;
+  };
+  const onArrayOrObjectFinish = () => {
+    currentRef = currentRef as ObjectNode | ArrayNode;
+    switch (currentRef.parent.type) {
+      case 'Root':
+        return;
+      case 'Array':
+        currentRef.parent.children.push(currentRef);
+        currentRef.parent.current = null;
+        currentRef = currentRef.parent;
+        return;
+      case 'Property':
+        currentRef.parent.current = currentRef;
+        currentRef = currentRef.parent;
+        currentRef.parent.children.push(currentRef);
+        currentRef.parent.current = null;
+        currentRef = currentRef.parent;
+        return;
+    }
+  };
+  const onPropertyFinish = () => {
+    currentRef = currentRef as PropertyNode;
+    currentRef.parent.children.push(currentRef);
+    currentRef.parent.current = null;
+    currentRef = currentRef.parent;
+  };
+  const getRoot = (): LiteralNode | ArrayNode | ObjectNode | null =>
+    root.current;
   const write = (token: Token) => {
     switch (currentRef.type) {
       case 'Root':
-        if (currentRef.value === null) {
-          if (token.type === 'Keyword') {
-            currentRef.value = {
-              type: 'Literal',
-              value: token.value,
-            };
-            return;
-          }
-          if (token.type === 'String') {
-            currentRef.value = {
-              type: 'Literal',
-              value: token.value,
-            };
-            return;
-          }
-          if (token.type === 'Number') {
-            currentRef.value = {
-              type: 'Literal',
-              value: token.value,
-            };
-            return;
-          }
-          if (token.type === 'Symbol' && token.value === '[') {
-            currentRef.value = {
-              type: 'Array',
-              children: [],
-              state: ArrayNodeState.Start,
-              parent: currentRef,
-              current: null,
-            };
-            currentRef = currentRef.value;
-            return;
-          }
-          if (token.type === 'Symbol' && token.value === '{') {
-            currentRef.value = {
-              type: 'Object',
-              children: [],
-              state: ObjectNodeState.Start,
-              parent: currentRef,
-              current: null,
-            };
-            currentRef = currentRef.value;
+        if (currentRef.current === null) {
+          const next = tryGetNextValue(token);
+          if (next) {
+            currentRef.current = next;
+            if (next.type !== 'Literal') {
+              currentRef = next;
+            }
             return;
           }
         }
         throw new Error('解析错误');
       case 'Array':
         switch (currentRef.state) {
-          case ArrayNodeState.Start:
+          case ArrayNodeState.Start: {
             if (token.type === 'Symbol' && token.value === ']') {
-              switch (currentRef.parent.type) {
-                case 'Root':
-                  return;
-                case 'Array':
-                  currentRef.parent.children.push(currentRef);
-                  currentRef.parent.current = null;
-                  currentRef = currentRef.parent;
-                  return;
-                case 'Property':
-                  currentRef.parent.value = currentRef;
-                  currentRef = currentRef.parent;
-                  currentRef.parent.children.push(currentRef);
-                  currentRef.parent.current = null;
-                  currentRef = currentRef.parent;
-                  return;
+              onArrayOrObjectFinish();
+              return;
+            }
+            const next = tryGetNextValue(token);
+            if (next) {
+              currentRef.state = ArrayNodeState.Value;
+              if (next.type === 'Literal') {
+                currentRef.children.push(next);
+                currentRef.current = null;
+              } else {
+                currentRef.current = next;
+                currentRef = next;
               }
-            }
-            if (token.type === 'Keyword') {
-              currentRef.state = ArrayNodeState.Value;
-              currentRef.children.push({
-                type: 'Literal',
-                value: token.value,
-              });
-              return;
-            }
-            if (token.type === 'String') {
-              currentRef.state = ArrayNodeState.Value;
-              currentRef.children.push({
-                type: 'Literal',
-                value: token.value,
-              });
-              return;
-            }
-            if (token.type === 'Number') {
-              currentRef.state = ArrayNodeState.Value;
-              currentRef.children.push({
-                type: 'Literal',
-                value: token.value,
-              });
-              return;
-            }
-            if (token.type === 'Symbol' && token.value === '[') {
-              currentRef.state = ArrayNodeState.Value;
-              currentRef.current = {
-                type: 'Array',
-                children: [],
-                state: ArrayNodeState.Start,
-                parent: currentRef,
-                current: null,
-              };
-              currentRef = currentRef.current;
-              return;
-            }
-            if (token.type === 'Symbol' && token.value === '{') {
-              currentRef.state = ArrayNodeState.Value;
-              currentRef.current = {
-                type: 'Object',
-                children: [],
-                state: ObjectNodeState.Start,
-                parent: currentRef,
-                current: null,
-              };
               return;
             }
             throw new Error('解析错误');
+          }
           case ArrayNodeState.Value:
             if (token.type === 'Symbol' && token.value === ']') {
-              switch (currentRef.parent.type) {
-                case 'Root':
-                  return;
-                case 'Array':
-                  currentRef.parent.children.push(currentRef);
-                  currentRef.parent.current = null;
-                  currentRef = currentRef.parent;
-                  return;
-                case 'Property':
-                  currentRef.parent.value = currentRef;
-                  currentRef = currentRef.parent;
-                  currentRef.parent.children.push(currentRef);
-                  currentRef.parent.current = null;
-                  currentRef = currentRef.parent;
-                  return;
-              }
+              onArrayOrObjectFinish();
+              return;
             }
             if (token.type === 'Symbol' && token.value === ',') {
               currentRef.state = ArrayNodeState.Comma;
               return;
             }
             throw new Error('解析错误');
-          case ArrayNodeState.Comma:
-            if (token.type === 'Keyword') {
+          case ArrayNodeState.Comma: {
+            const next = tryGetNextValue(token);
+            if (next) {
               currentRef.state = ArrayNodeState.Value;
-              currentRef.children.push({
-                type: 'Literal',
-                value: token.value,
-              });
-              return;
-            }
-            if (token.type === 'String') {
-              currentRef.state = ArrayNodeState.Value;
-              currentRef.children.push({
-                type: 'Literal',
-                value: token.value,
-              });
-              return;
-            }
-            if (token.type === 'Number') {
-              currentRef.state = ArrayNodeState.Value;
-              currentRef.children.push({
-                type: 'Literal',
-                value: token.value,
-              });
-              return;
-            }
-            if (token.type === 'Symbol' && token.value === '[') {
-              currentRef.state = ArrayNodeState.Value;
-              currentRef.current = {
-                type: 'Array',
-                children: [],
-                state: ArrayNodeState.Start,
-                parent: currentRef,
-                current: null,
-              };
-              currentRef = currentRef.current;
-              return;
-            }
-            if (token.type === 'Symbol' && token.value === '{') {
-              currentRef.state = ArrayNodeState.Value;
-              currentRef.current = {
-                type: 'Object',
-                children: [],
-                state: ObjectNodeState.Start,
-                parent: currentRef,
-                current: null,
-              };
+              if (next.type === 'Literal') {
+                currentRef.children.push(next);
+                currentRef.current = null;
+              } else {
+                currentRef.current = next;
+                currentRef = next;
+              }
               return;
             }
             throw new Error('解析错误');
+          }
         }
       case 'Property':
         switch (currentRef.state) {
@@ -264,65 +200,20 @@ export default function createParser() {
               return;
             }
             throw new Error('解析错误');
-          case PropertyNodeState.Colon:
-            if (token.type === 'Keyword') {
+          case PropertyNodeState.Colon: {
+            const next = tryGetNextValue(token);
+            if (next) {
               currentRef.state = PropertyNodeState.Value;
-              currentRef.value = {
-                type: 'Literal',
-                value: token.value,
-              };
-              currentRef.parent.children.push(currentRef);
-              currentRef.parent.current = null;
-              currentRef = currentRef.parent;
-              return;
-            }
-            if (token.type === 'String') {
-              currentRef.state = PropertyNodeState.Value;
-              currentRef.value = {
-                type: 'Literal',
-                value: token.value,
-              };
-              currentRef.parent.children.push(currentRef);
-              currentRef.parent.current = null;
-              currentRef = currentRef.parent;
-              return;
-            }
-            if (token.type === 'Number') {
-              currentRef.state = PropertyNodeState.Value;
-              currentRef.value = {
-                type: 'Literal',
-                value: token.value,
-              };
-              currentRef.parent.children.push(currentRef);
-              currentRef.parent.current = null;
-              currentRef = currentRef.parent;
-              return;
-            }
-            if (token.type === 'Symbol' && token.value === '[') {
-              currentRef.state = PropertyNodeState.Value;
-              currentRef.value = {
-                type: 'Array',
-                children: [],
-                state: ArrayNodeState.Start,
-                parent: currentRef,
-                current: null,
-              };
-              currentRef = currentRef.value;
-              return;
-            }
-            if (token.type === 'Symbol' && token.value === '{') {
-              currentRef.state = PropertyNodeState.Value;
-              currentRef.value = {
-                type: 'Object',
-                children: [],
-                state: ObjectNodeState.Start,
-                parent: currentRef,
-                current: null,
-              };
-              currentRef = currentRef.value;
+              currentRef.current = next;
+              if (next.type === 'Literal') {
+                onPropertyFinish();
+              } else {
+                currentRef = next;
+              }
               return;
             }
             throw new Error('解析错误');
+          }
         }
       case 'Object':
         switch (currentRef.state) {
@@ -335,7 +226,7 @@ export default function createParser() {
                   type: 'Identifier',
                   value: token.value,
                 },
-                value: null,
+                current: null,
                 state: PropertyNodeState.Key,
                 parent: currentRef,
               };
@@ -343,42 +234,14 @@ export default function createParser() {
               return;
             }
             if (token.type === 'Symbol' && token.value === '}') {
-              switch (currentRef.parent.type) {
-                case 'Root':
-                  return;
-                case 'Array':
-                  currentRef.parent.children.push(currentRef);
-                  currentRef.parent.current = null;
-                  currentRef = currentRef.parent;
-                  return;
-                case 'Property':
-                  currentRef.parent.value = currentRef;
-                  currentRef = currentRef.parent;
-                  currentRef.parent.children.push(currentRef);
-                  currentRef.parent.current = null;
-                  currentRef = currentRef.parent;
-                  return;
-              }
+              onArrayOrObjectFinish();
+              return;
             }
             throw new Error('解析错误');
           case ObjectNodeState.Property:
             if (token.type === 'Symbol' && token.value === '}') {
-              switch (currentRef.parent.type) {
-                case 'Root':
-                  return;
-                case 'Array':
-                  currentRef.parent.children.push(currentRef);
-                  currentRef.parent.current = null;
-                  currentRef = currentRef.parent;
-                  return;
-                case 'Property':
-                  currentRef.parent.value = currentRef;
-                  currentRef = currentRef.parent;
-                  currentRef.parent.children.push(currentRef);
-                  currentRef.parent.current = null;
-                  currentRef = currentRef.parent;
-                  return;
-              }
+              onArrayOrObjectFinish();
+              return;
             }
             if (token.type === 'Symbol' && token.value === ',') {
               currentRef.state = ObjectNodeState.Comma;
@@ -394,7 +257,7 @@ export default function createParser() {
                   type: 'Identifier',
                   value: token.value,
                 },
-                value: null,
+                current: null,
                 state: PropertyNodeState.Key,
                 parent: currentRef,
               };

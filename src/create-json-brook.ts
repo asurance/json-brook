@@ -19,8 +19,8 @@ function getValueFromNode(node: LiteralNode | ArrayNode | ObjectNode): any {
         node.current ? [...node.children, node.current] : node.children
       ).reduce(
         (obj, property) => {
-          if (property.value) {
-            obj[property.key.value] = getValueFromNode(property.value);
+          if (property.current) {
+            obj[property.key.value] = getValueFromNode(property.current);
           }
           return obj;
         },
@@ -29,6 +29,7 @@ function getValueFromNode(node: LiteralNode | ArrayNode | ObjectNode): any {
       );
   }
 }
+
 export default function createJsonBrook() {
   const tokenize = createTokenize();
   const parser = createParser();
