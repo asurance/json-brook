@@ -1,11 +1,8 @@
 {
   "name": "json-brook",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "parse json data streamly",
-  "keywords": [
-    "json",
-    "stream"
-  ],
+  "keywords": ["json", "stream"],
   "homepage": "https://github.com/asurance/json-brook",
   "bugs": {
     "url": "https://github.com/asurance/json-brook/issues"
@@ -16,10 +13,7 @@
   "main": "./dist/lib/index.js",
   "module": "./dist/es/index.js",
   "types": "./dist/types/index.d.ts",
-  "files": [
-    "dist",
-    "CHANGELOG.md"
-  ],
+  "files": ["dist", "CHANGELOG.md"],
   "scripts": {
     "build": "modern build",
     "build:doc": "modern build --platform",
