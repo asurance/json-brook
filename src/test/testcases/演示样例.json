@@ -1,0 +1,7 @@
+{
+  "string": "welcome to json brook",
+  "number": 20241102,
+  "boolean": true,
+  "array": ["a", "b", "c"],
+  "null": null
+}
