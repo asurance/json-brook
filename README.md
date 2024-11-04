@@ -29,6 +29,12 @@ jsonBrook.end();
 console.log(jsonBrook.getCurrent());
 ```
 
+## API
+`createJsonBrook` 返回一个JsonBrook实例，JsonBrook实例具有以下方法：
+* `write` 接受字符串并解析，如果解析失败会抛错
+* `end` 结束输入并解析Json数据(针对比较极端的纯数字形式解析，需要知道当前输入已结束)，如果解析失败会抛错
+* `getCurrent` 获取当前解析结果
+
 ## 在线尝试
 [codesandbox](https://codesandbox.io/p/sandbox/4v5slw)
 
