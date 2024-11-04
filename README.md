@@ -2,7 +2,7 @@
 
 ![演示视频](assets/showcase.gif)
 
-> 流式解析Json数据
+> 流式解析Json数据  
 > 实现上参考了[json-to-ast](https://github.com/vtrushin/json-to-ast)
 
 ## 快速入门
@@ -28,3 +28,7 @@ for (const char of sample) {
 jsonBrook.end();
 console.log(jsonBrook.getCurrent());
 ```
+
+## 在线尝试
+[codesandbox](https://codesandbox.io/p/sandbox/4v5slw)
+
