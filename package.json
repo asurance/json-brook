@@ -1,6 +1,6 @@
 {
   "name": "json-brook",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "parse json data streamly",
   "keywords": ["json", "stream"],
   "homepage": "https://github.com/asurance/json-brook",

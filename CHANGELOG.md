@@ -1,5 +1,11 @@
 # json-brook
 
+## 0.0.4
+
+### Patch Changes
+
+- 调整打包产物
+
 ## 0.0.3
 
 ### Patch Changes
