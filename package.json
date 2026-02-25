@@ -15,19 +15,22 @@
 	"sideEffects": [],
 	"type": "module",
 	"files": [
-		"dist"
+		"dist",
+		"CHANGELOG.md"
 	],
-	"main": "./dist/my-lib.umd.cjs",
-	"module": "./dist/my-lib.js",
+	"main": "./dist/index.umd.cjs",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
 	"exports": {
 		".": {
-			"import": "./dist/my-lib.js",
-			"require": "./dist/my-lib.umd.cjs"
+			"import": "./dist/index.js",
+			"require": "./dist/index.umd.cjs"
 		}
 	},
 	"scripts": {
-		"dev": "vite",
+		"dev": "vite --config vite.doc.config.ts",
 		"build": "tsc && vite build",
+		"build:doc": "tsc && vite build --config vite.doc.config.ts",
 		"preview": "vite preview",
 		"lint": "biome check --fix"
 	},
@@ -41,16 +44,18 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.4.4",
+		"@tailwindcss/vite": "^4.1.13",
 		"@types/node": "^25.3.0",
 		"lint-staged": "~16.2.7",
+		"shiki": "^3.22.0",
 		"simple-git-hooks": "^2.13.1",
+		"solid-devtools": "^0.34.3",
+		"solid-js": "^1.9.11",
+		"tailwindcss": "^4.1.13",
 		"typescript": "~5.9.3",
 		"vite": "^7.3.1",
-		"vite-plugin-dts": "^4.5.4"
+		"vite-plugin-dts": "^4.5.4",
+		"vite-plugin-solid": "^2.11.8"
 	},
-	"packageManager": "pnpm@9.1.2",
-	"publishConfig": {
-		"access": "public",
-		"registry": "https://registry.npmjs.org/"
-	}
+	"packageManager": "pnpm@9.1.2"
 }
