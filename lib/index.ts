@@ -1,10 +1,12 @@
+import * as generate from "./generate";
 import * as parse from "./parse";
 import * as tokenize from "./tokenize";
 
+export type * from "./generate";
 export type * from "./parse";
 export type * from "./tokenize";
 
-export { parse, tokenize };
+export { generate, parse, tokenize };
 
 export type JsonBrook = {
 	getRoot: () => parse.RootNode;
