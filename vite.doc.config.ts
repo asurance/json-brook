@@ -4,6 +4,7 @@ import { defineConfig } from "vite";
 import solidPlugin from "vite-plugin-solid";
 
 export default defineConfig({
+	base: "/json-brook/",
 	plugins: [devtools(), solidPlugin(), tailwindcss()],
 	server: {
 		port: 3000,
