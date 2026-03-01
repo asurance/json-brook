@@ -1,6 +1,12 @@
-import { codeToHtml } from "shiki";
+import { createHighlighter } from "shiki";
+import { Button, ProgressBar } from "solid-bootstrap";
 import type { Component } from "solid-js";
-import { createResource, Show } from "solid-js";
+import { createResource, createSignal, Show } from "solid-js";
+import { createJsonBrook } from "../lib";
+import Ast from "./Ast";
+import { lang, theme } from "./constant";
+import Result from "./Result";
+import Source from "./Source";
 
 const testJsonCode = JSON.stringify(
 	{
@@ -13,40 +19,63 @@ const testJsonCode = JSON.stringify(
 	4,
 );
 
-// const highlighter = await createHighlighter({
-// 	langs: ["json"],
-// 	themes: ["vitesse-light"],
-// });
-
-const result = await codeToHtml(testJsonCode, {
-	lang: "json",
-	theme: "vitesse-light",
-	decorations: [
-		{
-			start: 2,
-			end: 10,
-			properties: {
-				class: "bg-red-500",
-			},
-		},
-	],
+const highlighterPromise = await createHighlighter({
+	langs: [lang],
+	themes: [theme],
 });
 
 const App: Component = () => {
-	const [codeResult] = createResource(async () => {
-		return result;
+	const [getHighlighter] = createResource(() => {
+		return highlighterPromise;
 	});
+	const jsonBrook = createJsonBrook();
+	const [getParsedLength, setParsedLength] = createSignal(0);
+
 	return (
-		<div>
-			<header></header>
-			<main>
-				<div>
-					<Show when={codeResult()}>{(c) => <div innerHTML={c()} />}</Show>
-				</div>
-				<div></div>
-				<div></div>
-			</main>
-		</div>
+		<main>
+			<div>
+				<Show when={getHighlighter()}>
+					{(getHighlighter) => (
+						<>
+							<div>
+								<Source
+									highlighter={getHighlighter()}
+									sourceCode={testJsonCode}
+									parsedLength={getParsedLength()}
+								/>
+							</div>
+							<div>
+								<Ast
+									highlighter={getHighlighter()}
+									jsonBrook={jsonBrook}
+									parsedLength={getParsedLength()}
+								/>
+							</div>
+							<div>
+								<Result
+									highlighter={getHighlighter()}
+									jsonBrook={jsonBrook}
+									parsedLength={getParsedLength()}
+								/>
+							</div>
+						</>
+					)}
+				</Show>
+			</div>
+			<div>
+				<Button
+					disabled={getParsedLength() === testJsonCode.length}
+					onClick={() => {
+						jsonBrook.parse(testJsonCode[getParsedLength()]);
+						setParsedLength((val) => val + 1);
+					}}
+				>
+					parse next
+				</Button>
+				{`${getParsedLength()}/${testJsonCode.length}`}
+				<ProgressBar now={getParsedLength()} max={testJsonCode.length} />
+			</div>
+		</main>
 	);
 };
 

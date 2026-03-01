@@ -23,9 +23,15 @@ importers:
       shiki:
         specifier: ^3.22.0
         version: 3.22.0
+      shiki-magic-move:
+        specifier: ^1.2.1
+        version: 1.2.1(shiki@3.22.0)(solid-js@1.9.11)
       simple-git-hooks:
         specifier: ^2.13.1
         version: 2.13.1
+      solid-bootstrap:
+        specifier: ^1.0.21
+        version: 1.0.21(solid-js@1.9.11)
       solid-devtools:
         specifier: ^0.34.3
         version: 0.34.5(solid-js@1.9.11)(vite@7.3.1(@types/node@25.3.0)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.34.1)(yaml@2.8.2))
@@ -124,6 +130,10 @@ packages:
     engines: {node: '>=6.9.0'}
     peerDependencies:
       '@babel/core': ^7.0.0-0
+
+  '@babel/runtime@7.28.6':
+    resolution: {integrity: sha512-05WQkdpL9COIMz4LjTxGpPNCdlpyimKppYNoJ5Di5EUObifl8t4tuLuUBBZEpoLYOmfvIWrsp9fCl0HoPRVTdA==}
+    engines: {node: '>=6.9.0'}
 
   '@babel/template@7.28.6':
     resolution: {integrity: sha512-YA6Ma2KsCdGb+WC6UpBVFJGXL58MDA6oyONbjyF/+5sBgxY/dwkhLogbMT2GXXyU84/IhRw/2D1Os1B/giz+BQ==}
@@ -380,6 +390,9 @@ packages:
 
   '@nothing-but/utils@0.17.0':
     resolution: {integrity: sha512-TuCHcHLOqDL0SnaAxACfuRHBNRgNJcNn9X0GiH5H3YSDBVquCr3qEIG3FOQAuMyZCbu9w8nk2CHhOsn7IvhIwQ==}
+
+  '@popperjs/core@2.11.8':
+    resolution: {integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==}
 
   '@rollup/pluginutils@5.3.0':
     resolution: {integrity: sha512-5EdhGZtnu3V88ces7s53hhfK5KSASnJZv8Lulpc04cWO3REESroJXg73DFsOmgbU2BhwV0E20bu2IDZb3VKW4Q==}
@@ -938,9 +951,15 @@ packages:
   devlop@1.1.0:
     resolution: {integrity: sha512-RWmIqhcFf1lRYBvNmr7qTNuyCt/7/ns2jbpp1+PalgE/rDQcBT0fioSMUpJ93irlUhC5hrg4cYqe6U+0ImW0rA==}
 
+  diff-match-patch-es@1.0.1:
+    resolution: {integrity: sha512-KhSofrZDERg/NE6Nd+TK53knp2qz0o2Ix8rhkXd3Chfm7Wlo58Eq/juNmkyS6bS+3xS26L3Pstz3BdY/q+e9UQ==}
+
   diff@8.0.3:
     resolution: {integrity: sha512-qejHi7bcSD4hQAZE0tNAawRK1ZtafHDmMTMkrrIGgSLl7hTnQHmKCeB45xAcbfTqK2zowkM3j3bHt/4b/ARbYQ==}
     engines: {node: '>=0.3.1'}
+
+  dom-helpers@5.2.1:
+    resolution: {integrity: sha512-nRCa7CK3VTrM2NmGkIy4cbK7IZlgBE/PYMn55rrXefr5xXDP0LdtfPnblFDoVdcAfslJ7or6iqAUnx0CCGIWQA==}
 
   electron-to-chromium@1.5.302:
     resolution: {integrity: sha512-sM6HAN2LyK82IyPBpznDRqlTQAtuSaO+ShzFiWTvoMJLHyZ+Y39r8VMfHzwbU8MVBzQ4Wdn85+wlZl2TLGIlwg==}
@@ -1253,6 +1272,9 @@ packages:
   node-releases@2.0.27:
     resolution: {integrity: sha512-nmh3lCkYZ3grZvqcCH+fjmQ7X+H0OeZgP40OierEaAptX4XofMh5kwNbWh7lBduUzCcV/8kZ+NDLCwm2iorIlA==}
 
+  ohash@2.0.11:
+    resolution: {integrity: sha512-RdR9FQrFwNBNXAr4GixM8YaRZRJ5PUWbKYbE5eOsrwAjJW0q2REGcf79oYPsLyskQCZG1PLN+S/K1V00joZAoQ==}
+
   onetime@7.0.0:
     resolution: {integrity: sha512-VXJjc87FScF88uafS3JllDgvAm+c/Slfz06lorj2uAY34rlUu0Nt+v8wreiImcrgAjjIHp1rXpTDlLOGw29WwQ==}
     engines: {node: '>=18'}
@@ -1360,6 +1382,26 @@ packages:
     resolution: {integrity: sha512-OE4cvmJ1uSPrKorFIH9/w/Qwuvi/IMcGbv5RKgcJ/zjA/IohDLU6SVaxFN9FwajbP7nsX0dQqMDes1whk3y+yw==}
     engines: {node: '>=10'}
 
+  shiki-magic-move@1.2.1:
+    resolution: {integrity: sha512-421QfXnBNbsyOkb+gh/Sm18SSedN7pVc+ZA4gMCEF6YPtvEIntP5CojBiVz9AL0apCRsWeiZfVBEmw0oUP+uMg==}
+    peerDependencies:
+      react: ^18.2.0 || ^19.0.0
+      shiki: ^1.0.0 || ^2.0.0 || ^3.0.0
+      solid-js: ^1.9.1
+      svelte: ^5.0.0-0
+      vue: ^3.4.0
+    peerDependenciesMeta:
+      react:
+        optional: true
+      shiki:
+        optional: true
+      solid-js:
+        optional: true
+      svelte:
+        optional: true
+      vue:
+        optional: true
+
   shiki@3.22.0:
     resolution: {integrity: sha512-LBnhsoYEe0Eou4e1VgJACes+O6S6QC0w71fCSp5Oya79inkwkm15gQ1UF6VtQ8j/taMDh79hAB49WUk8ALQW3g==}
 
@@ -1375,6 +1417,16 @@ packages:
     resolution: {integrity: sha512-iOBWFgUX7caIZiuutICxVgX1SdxwAVFFKwt1EvMYYec/NWO5meOJ6K5uQxhrYBdQJne4KxiqZc+KptFOWFSI9w==}
     engines: {node: '>=18'}
 
+  solid-bootstrap-core@2.0.0:
+    resolution: {integrity: sha512-tw1me1iEvI+UzYRL2Gs53MP51WVwx785CU+6KQVGhaLESw3OoayeFLhe1CvUYb7kuskjtNGyAorZMdMwBJQIBA==}
+    peerDependencies:
+      solid-js: '>=1.6.0'
+
+  solid-bootstrap@1.0.21:
+    resolution: {integrity: sha512-B1+1qsdqrdQhl4xgmgrFRafxOM3xrnafxrC1scbOTYYJI2ido1XfoxtYyJ72W1eSHxYjm8eRGXdGTGdBJsGPpg==}
+    peerDependencies:
+      solid-js: '>=1.6.0'
+
   solid-devtools@0.34.5:
     resolution: {integrity: sha512-KNVdS9MQzzeVS++Vmg4JeU0fM6ZMuBEmkBA7SmqPS2s5UHpRjv1PNH8gShmlN9L/tki6OUAzJP3H1aKq2AcOSg==}
     peerDependencies:
@@ -1386,6 +1438,11 @@ packages:
 
   solid-js@1.9.11:
     resolution: {integrity: sha512-WEJtcc5mkh/BnHA6Yrg4whlF8g6QwpmXXRg4P2ztPmcKeHHlH4+djYecBLhSpecZY2RRECXYUwIc/C2r3yzQ4Q==}
+
+  solid-react-transition@1.0.11:
+    resolution: {integrity: sha512-YMT7z6sOupCicDtX19156vbVOm3vCIgjVhPTybR9gLKiIPrDB2NDVqnQk4kpNCDZTOwSjLTOyUQw0xJnXgDg2A==}
+    peerDependencies:
+      solid-js: '>=1.6.0'
 
   solid-refresh@0.6.3:
     resolution: {integrity: sha512-F3aPsX6hVw9ttm5LYlth8Q15x6MlI/J3Dn+o3EQyRTtTxidepSTwAYdozt01/YA+7ObcciagGEyXIopGZzQtbA==}
@@ -1696,6 +1753,8 @@ snapshots:
       '@babel/core': 7.29.0
       '@babel/helper-plugin-utils': 7.28.6
 
+  '@babel/runtime@7.28.6': {}
+
   '@babel/template@7.28.6':
     dependencies:
       '@babel/code-frame': 7.29.0
@@ -1894,6 +1953,8 @@ snapshots:
   '@microsoft/tsdoc@0.16.0': {}
 
   '@nothing-but/utils@0.17.0': {}
+
+  '@popperjs/core@2.11.8': {}
 
   '@rollup/pluginutils@5.3.0(rollup@4.59.0)':
     dependencies:
@@ -2422,7 +2483,14 @@ snapshots:
     dependencies:
       dequal: 2.0.3
 
+  diff-match-patch-es@1.0.1: {}
+
   diff@8.0.3: {}
+
+  dom-helpers@5.2.1:
+    dependencies:
+      '@babel/runtime': 7.28.6
+      csstype: 3.2.3
 
   electron-to-chromium@1.5.302: {}
 
@@ -2728,6 +2796,8 @@ snapshots:
 
   node-releases@2.0.27: {}
 
+  ohash@2.0.11: {}
+
   onetime@7.0.0:
     dependencies:
       mimic-function: 5.0.1
@@ -2850,6 +2920,14 @@ snapshots:
 
   seroval@1.5.0: {}
 
+  shiki-magic-move@1.2.1(shiki@3.22.0)(solid-js@1.9.11):
+    dependencies:
+      diff-match-patch-es: 1.0.1
+      ohash: 2.0.11
+    optionalDependencies:
+      shiki: 3.22.0
+      solid-js: 1.9.11
+
   shiki@3.22.0:
     dependencies:
       '@shikijs/core': 3.22.0
@@ -2870,6 +2948,20 @@ snapshots:
       ansi-styles: 6.2.3
       is-fullwidth-code-point: 5.1.0
 
+  solid-bootstrap-core@2.0.0(solid-js@1.9.11):
+    dependencies:
+      '@popperjs/core': 2.11.8
+      dom-helpers: 5.2.1
+      solid-js: 1.9.11
+      solid-react-transition: 1.0.11(solid-js@1.9.11)
+
+  solid-bootstrap@1.0.21(solid-js@1.9.11):
+    dependencies:
+      dom-helpers: 5.2.1
+      solid-bootstrap-core: 2.0.0(solid-js@1.9.11)
+      solid-js: 1.9.11
+      solid-react-transition: 1.0.11(solid-js@1.9.11)
+
   solid-devtools@0.34.5(solid-js@1.9.11)(vite@7.3.1(@types/node@25.3.0)(jiti@2.6.1)(lightningcss@1.31.1)(terser@5.34.1)(yaml@2.8.2)):
     dependencies:
       '@babel/core': 7.29.0
@@ -2888,6 +2980,10 @@ snapshots:
       csstype: 3.2.3
       seroval: 1.5.0
       seroval-plugins: 1.5.0(seroval@1.5.0)
+
+  solid-react-transition@1.0.11(solid-js@1.9.11):
+    dependencies:
+      solid-js: 1.9.11
 
   solid-refresh@0.6.3(solid-js@1.9.11):
     dependencies:
