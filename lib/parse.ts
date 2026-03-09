@@ -21,10 +21,10 @@ export type LiteralNode = {
 };
 
 export const ArrayNodeState = {
-	Start: 1,
-	Value: 2,
-	Comma: 3,
-	End: 4,
+	Start: "Start",
+	Value: "Value",
+	Comma: "Comma",
+	End: "End",
 } as const;
 
 export type ArrayNodeState =
@@ -45,10 +45,10 @@ export type IdentifierNode = {
 };
 
 export const PropertyNodeState = {
-	Key: 1,
-	Colon: 2,
-	Value: 3,
-	End: 4,
+	Key: "Key",
+	Colon: "Colon",
+	Value: "Value",
+	End: "End",
 } as const;
 
 export type PropertyNodeState =
@@ -63,10 +63,10 @@ export type PropertyNode = {
 };
 
 export const ObjectNodeState = {
-	Start: 1,
-	Property: 2,
-	Comma: 3,
-	End: 4,
+	Start: "Start",
+	Property: "Property",
+	Comma: "Comma",
+	End: "End",
 } as const;
 
 export type ObjectNodeState =

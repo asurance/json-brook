@@ -19,8 +19,8 @@ export type KeywordTokenCurrent = {
 };
 
 export const StringTokenState = {
-	Normal: 1,
-	Escape: 2,
+	Normal: "Normal",
+	Escape: "Escape",
 } as const;
 
 export type StringTokenState =
@@ -39,13 +39,13 @@ export type StringTokenCurrent = {
 };
 
 export const NumberTokenState = {
-	Negative: 1,
-	Zero: 2,
-	Digit: 3,
-	Point: 4,
-	DigitFraction: 5,
-	Exp: 6,
-	ExpDigitOrSign: 7,
+	Negative: "Negative",
+	Zero: "Zero",
+	Digit: "Digit",
+	Point: "Point",
+	DigitFraction: "DigitFraction",
+	Exp: "Exp",
+	ExpDigitOrSign: "ExpDigitOrSign",
 } as const;
 
 export type NumberTokenState =
