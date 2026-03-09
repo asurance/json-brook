@@ -33,7 +33,7 @@ const App: Component = () => {
 
 	return (
 		<main>
-			<div>
+			<div class="grid grid-cols-3">
 				<Show when={getHighlighter()}>
 					{(getHighlighter) => (
 						<>

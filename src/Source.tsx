@@ -18,7 +18,7 @@ const Source = (props: SourceProps) => {
 					start: props.parsedLength,
 					end: props.sourceCode.length,
 					properties: {
-						class: "!text-gray-400 [&_span]:!text-gray-500",
+						class: "!text-gray-400 [&_span]:!text-gray-500 bg-gray-100",
 					},
 				},
 			],
