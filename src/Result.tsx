@@ -1,5 +1,4 @@
 import type { HighlighterCore } from "shiki";
-import { ShikiMagicMove } from "shiki-magic-move/solid";
 import { createMemo, Show } from "solid-js";
 import type { JsonBrook } from "../lib";
 import { generate } from "../lib";
@@ -12,19 +11,25 @@ export type ResultProps = {
 };
 
 const Result = (props: ResultProps) => {
-	const getCode = createMemo(() => {
+	const getHtml = createMemo(() => {
 		props.parsedLength;
-		return JSON.stringify(generate.simpleGenerator(props.jsonBrook), null, 4);
+		const code = JSON.stringify(
+			generate.simpleGenerator(props.jsonBrook),
+			null,
+			4,
+		);
+		if (!code) {
+			return "";
+		}
+		return props.highlighter.codeToHtml(code, { lang, theme });
 	});
 	return (
-		<Show when={getCode()}>
-			<ShikiMagicMove
-				highlighter={props.highlighter}
-				lang={lang}
-				theme={theme}
-				code={getCode()}
-			/>
-		</Show>
+		<div class="flex flex-col gap-2 overflow-hidden h-full bg-white p-2 rounded">
+			<div class="text-xl font-bold flex-none">解析值</div>
+			<Show when={getHtml()}>
+				<div class="flex-1 overflow-auto" innerHTML={getHtml()} />
+			</Show>
+		</div>
 	);
 };
 

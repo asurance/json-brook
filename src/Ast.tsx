@@ -18,7 +18,12 @@ const Ast = (props: AstProps) => {
 		);
 		return props.highlighter.codeToHtml(root, { lang, theme });
 	};
-	return <div innerHTML={getHtml()} />;
+	return (
+		<div class="overflow-hidden h-full bg-white p-2 rounded flex flex-col gap-2">
+			<div class="text-xl font-bold flex-none">AST</div>
+			<div class="flex-1 overflow-auto" innerHTML={getHtml()} />
+		</div>
+	);
 };
 
 export default Ast;
