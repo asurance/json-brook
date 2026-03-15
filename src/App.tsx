@@ -66,7 +66,11 @@ const App: Component = () => {
 				<Button
 					disabled={getParsedLength() === testJsonCode.length}
 					onClick={() => {
-						jsonBrook.parse(testJsonCode[getParsedLength()]);
+						try {
+							jsonBrook.parse(testJsonCode[getParsedLength()]);
+						} catch (e) {
+							console.error(e);
+						}
 						setParsedLength((val) => val + 1);
 					}}
 				>

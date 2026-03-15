@@ -48,7 +48,6 @@ export const PropertyNodeState = {
 	Key: "Key",
 	Colon: "Colon",
 	Value: "Value",
-	End: "End",
 } as const;
 
 export type PropertyNodeState =
@@ -107,8 +106,10 @@ const onEndToParent = (
 			throw new Error("解析失败");
 		case "property":
 			if (parent.state === PropertyNodeState.Value) {
-				parent.state = PropertyNodeState.End;
-				return parent.parent;
+				if (!char) {
+					return parent.parent;
+				}
+				return parseObjectNode(parent.parent, char);
 			}
 			throw new Error("解析失败");
 	}
@@ -147,8 +148,14 @@ export const parseRootNode = (node: RootNode, char: string) => {
 				};
 				return node.value;
 		}
+		throw new Error("解析失败");
+	} else {
+		const nextToken = parseNextToken(char);
+		if (!nextToken.token && !nextToken.current) {
+			return node;
+		}
+		throw new Error("解析失败");
 	}
-	throw new Error("解析失败");
 };
 
 export const parseLiteralNode = (node: LiteralNode, char: string) => {
@@ -226,7 +233,7 @@ export const parseArrayNode = (node: ArrayNode, char: string) => {
 					return child;
 				}
 				case "{": {
-					node.state = ArrayNodeState.Start;
+					node.state = ArrayNodeState.Value;
 					const child: ObjectNode = {
 						type: "object",
 						state: ObjectNodeState.Start,
@@ -236,6 +243,24 @@ export const parseArrayNode = (node: ArrayNode, char: string) => {
 					node.children.push(child);
 					return child;
 				}
+			}
+			throw new Error("解析失败");
+		}
+		case ArrayNodeState.Value: {
+			const nextToken = parseNextToken(char);
+			if (nextToken.current) {
+				throw new Error("解析失败");
+			}
+			if (!nextToken.token) {
+				return node;
+			}
+			switch (nextToken.token.value) {
+				case ",":
+					node.state = ArrayNodeState.Comma;
+					return node;
+				case "]":
+					node.state = ArrayNodeState.End;
+					return onEndToParent(node.parent);
 			}
 			throw new Error("解析失败");
 		}
@@ -268,7 +293,7 @@ export const parseArrayNode = (node: ArrayNode, char: string) => {
 					return child;
 				}
 				case "{": {
-					node.state = ArrayNodeState.Start;
+					node.state = ArrayNodeState.Value;
 					const child: ObjectNode = {
 						type: "object",
 						state: ObjectNodeState.Start,
@@ -278,24 +303,6 @@ export const parseArrayNode = (node: ArrayNode, char: string) => {
 					node.children.push(child);
 					return child;
 				}
-			}
-			throw new Error("解析失败");
-		}
-		case ArrayNodeState.Value: {
-			const nextToken = parseNextToken(char);
-			if (nextToken.current) {
-				throw new Error("解析失败");
-			}
-			if (!nextToken.token) {
-				return node;
-			}
-			switch (nextToken.token.value) {
-				case ",":
-					node.state = ArrayNodeState.Comma;
-					return node;
-				case "]":
-					node.state = ArrayNodeState.End;
-					return onEndToParent(node.parent);
 			}
 			throw new Error("解析失败");
 		}
@@ -313,7 +320,6 @@ export const parseIdentifierNode = (node: IdentifierNode, char: string) => {
 		} else {
 			node.value = nextToken.token.value;
 			node.current = null;
-			node.parent.state = PropertyNodeState.Colon;
 			return node.parent;
 		}
 	}
@@ -322,7 +328,7 @@ export const parseIdentifierNode = (node: IdentifierNode, char: string) => {
 
 export const parsePropertyNode = (node: PropertyNode, char: string) => {
 	switch (node.state) {
-		case PropertyNodeState.Colon: {
+		case PropertyNodeState.Key: {
 			const nextToken = parseNextToken(char);
 			if (nextToken.current) {
 				throw new Error("解析失败");
@@ -332,14 +338,15 @@ export const parsePropertyNode = (node: PropertyNode, char: string) => {
 			}
 			switch (nextToken.token.value) {
 				case ":":
-					node.state = PropertyNodeState.Value;
+					node.state = PropertyNodeState.Colon;
 					return node;
 			}
 			throw new Error("解析失败");
 		}
-		case PropertyNodeState.Value: {
+		case PropertyNodeState.Colon: {
 			const nextToken = parseNextToken(char);
 			if (nextToken.current) {
+				node.state = PropertyNodeState.Value;
 				const child: LiteralNode = {
 					type: "literal",
 					value: null,
@@ -354,6 +361,7 @@ export const parsePropertyNode = (node: PropertyNode, char: string) => {
 			}
 			switch (nextToken.token.value) {
 				case "[": {
+					node.state = PropertyNodeState.Value;
 					const child: ArrayNode = {
 						type: "array",
 						state: ArrayNodeState.Start,
@@ -364,6 +372,7 @@ export const parsePropertyNode = (node: PropertyNode, char: string) => {
 					return child;
 				}
 				case "{": {
+					node.state = PropertyNodeState.Value;
 					const child: ObjectNode = {
 						type: "object",
 						state: ObjectNodeState.Start,
@@ -376,8 +385,7 @@ export const parsePropertyNode = (node: PropertyNode, char: string) => {
 			}
 			throw new Error("解析失败");
 		}
-		case PropertyNodeState.Key:
-		case PropertyNodeState.End:
+		case PropertyNodeState.Value:
 			throw new Error("解析失败");
 	}
 };
@@ -418,6 +426,24 @@ export const parseObjectNode = (node: ObjectNode, char: string) => {
 			}
 			throw new Error("解析失败");
 		}
+		case ObjectNodeState.Property: {
+			const nextToken = parseNextToken(char);
+			if (nextToken.current) {
+				throw new Error("解析失败");
+			}
+			if (!nextToken.token) {
+				return node;
+			}
+			switch (nextToken.token.value) {
+				case ",":
+					node.state = ObjectNodeState.Comma;
+					return node;
+				case "}":
+					node.state = ObjectNodeState.End;
+					return onEndToParent(node.parent);
+			}
+			throw new Error("解析失败");
+		}
 		case ObjectNodeState.Comma: {
 			const nextToken = parseNextToken(char);
 			if (nextToken.current) {
@@ -444,24 +470,6 @@ export const parseObjectNode = (node: ObjectNode, char: string) => {
 			}
 			if (!nextToken.token) {
 				return node;
-			}
-			throw new Error("解析失败");
-		}
-		case ObjectNodeState.Property: {
-			const nextToken = parseNextToken(char);
-			if (nextToken.current) {
-				throw new Error("解析失败");
-			}
-			if (!nextToken.token) {
-				return node;
-			}
-			switch (nextToken.token.value) {
-				case ",":
-					node.state = ObjectNodeState.Comma;
-					return node;
-				case "}":
-					node.state = ObjectNodeState.End;
-					return onEndToParent(node.parent);
 			}
 			throw new Error("解析失败");
 		}

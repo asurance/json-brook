@@ -10,12 +10,14 @@ const literalGenerator = (node: LiteralNode) => {
 	if (node.current) {
 		switch (node.current.type) {
 			case "keyword":
-				return node.current.value;
+				return JSON.parse(node.current.value);
 			case "string":
 				return JSON.parse(
-					node.current.escapeLength > 0
-						? node.current.value.slice(0, -node.current.escapeLength)
-						: node.current.value,
+					`${
+						node.current.escapeLength > 0
+							? node.current.value.slice(0, -node.current.escapeLength)
+							: node.current.value
+					}"`,
 				);
 			case "number":
 				return JSON.parse(

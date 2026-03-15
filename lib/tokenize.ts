@@ -201,7 +201,7 @@ export const parseNextTokenWithString = (
 					return {
 						token: {
 							type: "string",
-							value: current.value,
+							value: JSON.parse(current.value),
 						} as StringToken,
 						current: null,
 					};
