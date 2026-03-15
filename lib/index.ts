@@ -45,5 +45,8 @@ export const createJsonBrook = () => {
 					break;
 			}
 		},
+		end: () => {
+			parse.endAst(current);
+		},
 	};
 };

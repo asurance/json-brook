@@ -1,40 +1,66 @@
 # JsonBrook
 
-![演示视频](assets/showcase.gif)
-
 > 流式解析Json数据  
-> 实现上参考了[json-to-ast](https://github.com/vtrushin/json-to-ast)
+> 由[json-to-ast](https://github.com/vtrushin/json-to-ast)的实现启发而来
 
 ## 快速入门
 
 ```typescript
-import { createJsonBrook } from "json-brook";
+import { createJsonBrook, generate } from "json-brook";
 
 const jsonBrook = createJsonBrook();
 
-const sample = `{
-  "string": "welcome to json brook",
-  "number": 20241102,
-  "boolean": true,
-  "array": ["a", "b", "c"],
-  "null": null
-}`;
+const sample = JSON.stringify(
+	{
+		a: 1001,
+		b: "hello",
+		c: [1, 2, 3],
+		d: null,
+	},
+	null,
+	4,
+);
 
 for (const char of sample) {
-  jsonBrook.write(char);
-  console.log(jsonBrook.getCurrent());
+  jsonBrook.parse(char);
+  console.log(generate.simpleGenerator(jsonBrook));
 }
 
 jsonBrook.end();
-console.log(jsonBrook.getCurrent());
+console.log(generate.simpleGenerator(jsonBrook));
 ```
 
 ## API
+
+### 根导出
 `createJsonBrook` 返回一个JsonBrook实例，JsonBrook实例具有以下方法：
-* `write` 接受字符串并解析，如果解析失败会抛错
-* `end` 结束输入并解析Json数据(针对比较极端的纯数字形式解析，需要知道当前输入已结束)，如果解析失败会抛错
-* `getCurrent` 获取当前解析结果
+* `parse` 接受单个字符，去解析Json数据
+* `end` 代表流结束，仅针对某些特殊场景，如纯数字形式的Json字符串
+* `getRoot`: 获取当前解析出的ast根节点
+* `getCurrent` 获取当前正在解析的ast节点
+
+### tokenize导出
+该模块主要是token解析相关方法
+
+### parse导出
+该模块主要是ast解析相关方法
+
+### generate导出
+该模块目前仅导出了`simpleGenerator`，用于将ast转换为json对象
+* `simpleGenerator` 生成逻辑为激进模式，可返回未解析完成的字符串/数字，对于true/false/null,就提前返回
 
 ## 在线尝试
-[codesandbox](https://codesandbox.io/p/sandbox/4v5slw)
+[Playground](https://asurance.github.io/json-brook/)
+
+## 技术栈
+本身库为0依赖库，以下列出为Playground使用的技术栈
+* [lucide](https://lucide.dev/): 图标库
+* [shiki](https://shiki.matsu.io/): 代码高亮库
+* [tailwindcss](https://tailwindcss.com/): 样式库
+* [solid-js](https://www.solidjs.com/): 前端框架
+* [vite](https://vitejs.dev/): 构建工具
+* [biome](https://biomejs.dev/): 代码格式化工具
+
+## 在线文档
+[飞书文档](https://my.feishu.cn/wiki/M89bw6mCgiCAzJkjomwcAPJkntW)
 
