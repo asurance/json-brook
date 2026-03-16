@@ -242,7 +242,7 @@ export const parseNextTokenWithString = (
 				throw new Error("解析失败");
 			}
 			if (isHex(char)) {
-				if (current.escapeLength === 6) {
+				if (current.escapeLength === 5) {
 					current.state = StringTokenState.Normal;
 					current.value += char;
 					current.escapeLength = 0;

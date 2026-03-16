@@ -54,7 +54,7 @@ describe("字符串", () => {
 		expect(jsonBrook.generate()).toStrictEqual('hello"world!');
 	});
 	test("包含unicode字符的字符串", () => {
-		const jsonCode = JSON.stringify("hello\u0a20world!");
+		const jsonCode = '"hello\\u0a20world!"';
 		const jsonBrook = useJsonBrook(jsonCode);
 		expect(jsonBrook.generate()).toStrictEqual("hello\u0a20world!");
 	});
@@ -122,6 +122,69 @@ describe("数字", () => {
 			const jsonCode = "10086e";
 			const jsonBrook = useJsonBrook(jsonCode);
 			jsonBrook.generate();
+		}).toThrow();
+	});
+});
+
+describe("数组与对象嵌套", () => {
+	test("简单数组", () => {
+		const json = [1, "2", true, null];
+		const jsonCode = JSON.stringify(json);
+		const jsonBrook = useJsonBrook(jsonCode);
+		expect(jsonBrook.generate()).toStrictEqual(json);
+	});
+	test("简单对象", () => {
+		const json = { a: 1, b: "2", c: true, d: null };
+		const jsonCode = JSON.stringify(json);
+		const jsonBrook = useJsonBrook(jsonCode);
+		expect(jsonBrook.generate()).toStrictEqual(json);
+	});
+	test("深度嵌套", () => {
+		const json = {
+			a: [1, { b: 2 }],
+			c: { d: [3, 4] },
+		};
+		const jsonCode = JSON.stringify(json);
+		const jsonBrook = useJsonBrook(jsonCode);
+		expect(jsonBrook.generate()).toStrictEqual(json);
+	});
+	test("空数组与空对象", () => {
+		const json = { a: [], b: {} };
+		const jsonCode = JSON.stringify(json);
+		const jsonBrook = useJsonBrook(jsonCode);
+		expect(jsonBrook.generate()).toStrictEqual(json);
+	});
+});
+
+describe("错误处理", () => {
+	test("非法控制字符", () => {
+		expect(() => {
+			const jsonCode = `"\u0000"`;
+			useJsonBrook(jsonCode);
+		}).toThrow();
+	});
+	test("不完整的转义字符", () => {
+		expect(() => {
+			const jsonCode = `"\\u12"`;
+			useJsonBrook(jsonCode);
+		}).toThrow();
+	});
+	test("非法转义字符", () => {
+		expect(() => {
+			const jsonCode = `"\\x"`;
+			useJsonBrook(jsonCode);
+		}).toThrow();
+	});
+	test("对象缺失冒号", () => {
+		expect(() => {
+			const jsonCode = `{"a" 1}`;
+			useJsonBrook(jsonCode);
+		}).toThrow();
+	});
+	test("数组缺失逗号", () => {
+		expect(() => {
+			const jsonCode = `[1 2]`;
+			useJsonBrook(jsonCode);
 		}).toThrow();
 	});
 });

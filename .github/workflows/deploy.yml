@@ -34,6 +34,8 @@ jobs:
         run:  pnpm install 
       - name: Build package
         run:  pnpm build
+      - name: Test package
+        run:  pnpm test
       - name: Build Playgroud
         run:  pnpm build:doc
       - name: Upload artifact
