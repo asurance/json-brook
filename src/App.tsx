@@ -9,6 +9,7 @@ import { createJsonBrook } from "../lib";
 import Ast from "./Ast";
 import CreateModal from "./CreateModal";
 import { lang, theme } from "./constant";
+import GithubSvg from "./github.svg";
 import Result from "./Result";
 import Source from "./Source";
 
@@ -68,12 +69,26 @@ const App: Component = () => {
 	});
 	return (
 		<main class="h-screen flex flex-col gap-2 p-2 bg-blue-300">
-			<div class="flex-none flex gap-2 items-center bg-white rounded p-2">
+			<div class="flex-none flex justify-between items-center bg-white rounded p-2">
 				<Button onClick={() => setCreateModalShow(true)}>
 					<div class="inline-flex gap-2 items-center">
 						<Plus size={16} /> 新示例
 					</div>
 				</Button>
+				<button
+					type="button"
+					class="w-10 h-10 cursor-pointer"
+					onKeyDown={(e) => {
+						if (e.key === "Enter") {
+							window.open("https://github.com/asurance/json-brook");
+						}
+					}}
+					onClick={() => {
+						window.open("https://github.com/asurance/json-brook");
+					}}
+				>
+					<img src={GithubSvg} alt="github" />
+				</button>
 			</div>
 			<Show when={getHasError()}>
 				<Alert variant="danger" class="mb-0!">
