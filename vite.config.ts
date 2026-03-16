@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
@@ -14,4 +15,9 @@ export default defineConfig({
 		},
 	},
 	plugins: [dts({ include: ["lib"] })],
+	test: {
+		coverage: {
+			include: ["lib/**/*.ts"],
+		},
+	},
 });

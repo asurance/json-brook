@@ -32,6 +32,8 @@
 		"build": "tsc && vite build",
 		"build:doc": "tsc && vite build --config vite.doc.config.ts",
 		"preview": "vite preview",
+		"test": "vitest",
+		"coverage": "vitest run --coverage",
 		"lint": "biome check --fix"
 	},
 	"simple-git-hooks": {
@@ -46,6 +48,7 @@
 		"@biomejs/biome": "2.4.4",
 		"@tailwindcss/vite": "^4.1.13",
 		"@types/node": "^25.3.0",
+		"@vitest/coverage-v8": "4.1.0",
 		"lint-staged": "~16.2.7",
 		"lucide-solid": "^0.577.0",
 		"shiki": "^3.22.0",
@@ -57,7 +60,8 @@
 		"typescript": "~5.9.3",
 		"vite": "^7.3.1",
 		"vite-plugin-dts": "^4.5.4",
-		"vite-plugin-solid": "^2.11.8"
+		"vite-plugin-solid": "^2.11.8",
+		"vitest": "^4.1.0"
 	},
 	"packageManager": "pnpm@9.1.2"
 }

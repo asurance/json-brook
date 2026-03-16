@@ -8,11 +8,7 @@ export type * from "./tokenize";
 
 export { generate, parse, tokenize };
 
-export type JsonBrook = {
-	getRoot: () => parse.RootNode;
-	getCurrent: () => parse.Node;
-	parse: (char: string) => void;
-};
+export type JsonBrook = ReturnType<typeof createJsonBrook>;
 
 export const createJsonBrook = () => {
 	const root: parse.RootNode = {
@@ -23,6 +19,7 @@ export const createJsonBrook = () => {
 	return {
 		getRoot: () => root,
 		getCurrent: () => current,
+		generate: () => generate.rootGenerator(root),
 		parse: (char: string) => {
 			switch (current.type) {
 				case "root":

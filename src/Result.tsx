@@ -1,7 +1,6 @@
 import type { HighlighterCore } from "shiki";
 import { createMemo, Show } from "solid-js";
 import type { JsonBrook } from "../lib";
-import { generate } from "../lib";
 import { lang, theme } from "./constant";
 
 export type ResultProps = {
@@ -13,11 +12,7 @@ export type ResultProps = {
 const Result = (props: ResultProps) => {
 	const getHtml = createMemo(() => {
 		props.parsedLength;
-		const code = JSON.stringify(
-			generate.simpleGenerator(props.jsonBrook),
-			null,
-			4,
-		);
+		const code = JSON.stringify(props.jsonBrook.generate(), null, 4);
 		if (!code) {
 			return "";
 		}

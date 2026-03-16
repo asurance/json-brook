@@ -23,11 +23,11 @@ const sample = JSON.stringify(
 
 for (const char of sample) {
   jsonBrook.parse(char);
-  console.log(generate.simpleGenerator(jsonBrook));
+  console.log(jsonBrook.generate());
 }
 
 jsonBrook.end();
-console.log(generate.simpleGenerator(jsonBrook));
+console.log(jsonBrook.generate());
 ```
 
 ## API
@@ -38,6 +38,7 @@ console.log(generate.simpleGenerator(jsonBrook));
 * `end` 代表流结束，仅针对某些特殊场景，如纯数字形式的Json字符串
 * `getRoot`: 获取当前解析出的ast根节点
 * `getCurrent` 获取当前正在解析的ast节点
+* `generate` 生成当前解析结果，其中字符串和数字尽可能解析合法内容，对于true/false/null,只要识别开头就返回
 
 ### tokenize导出
 该模块主要是token解析相关方法
@@ -46,8 +47,7 @@ console.log(generate.simpleGenerator(jsonBrook));
 该模块主要是ast解析相关方法
 
 ### generate导出
-该模块目前仅导出了`simpleGenerator`，用于将ast转换为json对象
-* `simpleGenerator` 生成逻辑为激进模式，可返回未解析完成的字符串/数字，对于true/false/null,就提前返回
+该模块主要是默认生成方法
 
 ## 在线尝试
 [Playground](https://asurance.github.io/json-brook/)

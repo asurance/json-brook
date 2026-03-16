@@ -1,12 +1,6 @@
-import type {
-	ArrayNode,
-	JsonBrook,
-	LiteralNode,
-	ObjectNode,
-	RootNode,
-} from ".";
+import type { ArrayNode, LiteralNode, ObjectNode, RootNode } from ".";
 
-const literalGenerator = (node: LiteralNode) => {
+export const literalGenerator = (node: LiteralNode) => {
 	if (node.current) {
 		switch (node.current.type) {
 			case "keyword":
@@ -28,13 +22,13 @@ const literalGenerator = (node: LiteralNode) => {
 	return node.value;
 };
 
-const arrayGenerator = (node: ArrayNode) => {
+export const arrayGenerator = (node: ArrayNode) => {
 	return node.children.map((child) => {
 		return normalGenerator(child);
 	});
 };
 
-const objectGenerator = (node: ObjectNode) => {
+export const objectGenerator = (node: ObjectNode) => {
 	return node.children.reduce(
 		(prev, child) => {
 			if (child.value) {
@@ -46,7 +40,7 @@ const objectGenerator = (node: ObjectNode) => {
 	);
 };
 
-const normalGenerator = (
+export const normalGenerator = (
 	node: LiteralNode | ArrayNode | ObjectNode,
 ): unknown => {
 	switch (node.type) {
@@ -59,13 +53,9 @@ const normalGenerator = (
 	}
 };
 
-const rootGenerator = (node: RootNode) => {
+export const rootGenerator = (node: RootNode) => {
 	if (node.value) {
 		return normalGenerator(node.value);
 	}
 	return void 0;
-};
-
-export const simpleGenerator = (brook: JsonBrook) => {
-	return rootGenerator(brook.getRoot());
 };
