@@ -6,7 +6,7 @@
 ## 快速入门
 
 ```typescript
-import { createJsonBrook, generate } from "json-brook";
+import { createJsonBrook } from "json-brook";
 
 const jsonBrook = createJsonBrook();
 

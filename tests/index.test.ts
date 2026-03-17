@@ -10,7 +10,15 @@ const useJsonBrook = (str: string) => {
 	return jsonBrook;
 };
 
-test("默认", () => {
+const useParsingJsonBrook = (str: string) => {
+	const jsonBrook = createJsonBrook();
+	for (const char of str) {
+		jsonBrook.parse(char);
+	}
+	return jsonBrook;
+};
+
+test("基础", () => {
 	const json = {
 		a: 1001,
 		b: "hello",
@@ -20,6 +28,12 @@ test("默认", () => {
 	const jsonCode = JSON.stringify(json, null, 4);
 	const jsonBrook = useJsonBrook(jsonCode);
 	expect(jsonBrook.generate()).toStrictEqual(json);
+	expect(jsonBrook.getRoot()).toBe(jsonBrook.getCurrent());
+});
+
+test("默认值", () => {
+	const jsonBrook = createJsonBrook();
+	expect(jsonBrook.generate()).toStrictEqual(void 0);
 });
 
 describe("关键词", () => {
@@ -27,6 +41,11 @@ describe("关键词", () => {
 		test(`${keyword}`, () => {
 			const jsonCode = JSON.stringify(keyword);
 			const jsonBrook = useJsonBrook(jsonCode);
+			expect(jsonBrook.generate()).toStrictEqual(keyword);
+		});
+		test(`${keyword}首字母`, () => {
+			const jsonCode = JSON.stringify(keyword);
+			const jsonBrook = useParsingJsonBrook(jsonCode);
 			expect(jsonBrook.generate()).toStrictEqual(keyword);
 		});
 	}
@@ -64,6 +83,11 @@ describe("字符串", () => {
 			const jsonBrook = useJsonBrook(jsonCode);
 			jsonBrook.generate();
 		}).toThrow();
+	});
+	test("不完整的字符串解析中", () => {
+		const jsonCode = `"Hello`;
+		const jsonBrook = useParsingJsonBrook(jsonCode);
+		expect(jsonBrook.generate()).toStrictEqual("Hello");
 	});
 });
 
@@ -126,7 +150,7 @@ describe("数字", () => {
 	});
 });
 
-describe("数组与对象嵌套", () => {
+describe("数组与对象", () => {
 	test("简单数组", () => {
 		const json = [1, "2", true, null];
 		const jsonCode = JSON.stringify(json);
@@ -138,6 +162,16 @@ describe("数组与对象嵌套", () => {
 		const jsonCode = JSON.stringify(json);
 		const jsonBrook = useJsonBrook(jsonCode);
 		expect(jsonBrook.generate()).toStrictEqual(json);
+	});
+	test("数组解析中", () => {
+		const jsonCode = "[1, 2, 3";
+		const jsonBrook = useParsingJsonBrook(jsonCode);
+		expect(jsonBrook.generate()).toStrictEqual([1, 2, 3]);
+	});
+	test("对象解析中", () => {
+		const jsonCode = `{"a": 1, "b": 2`;
+		const jsonBrook = useParsingJsonBrook(jsonCode);
+		expect(jsonBrook.generate()).toStrictEqual({ a: 1, b: 2 });
 	});
 	test("深度嵌套", () => {
 		const json = {
